@@ -32,7 +32,7 @@
 1. 安装依赖：
 
 ```bash
-pip install beautifulsoup4
+pip install beautifulsoup4 pyyaml
 ```
 
 2. 将书签文件（HTML 格式）放到当前目录：
@@ -65,14 +65,20 @@ docker run -v $(pwd):/app bookmark-tool
 
 ## 自定义分类
 
-编辑 `parse_bookmarks.py` 中的 `category_rules` 字典来修改分类规则：
+分类规则保存在 `categories.yaml` 文件中，直接编辑即可：
 
-```python
-category_rules = {
-    '你的分类名': ['关键词1', '关键词2'],
-    # 添加更多分类...
-}
+```yaml
+开发/编程:
+  - github.com
+  - leetcode
+  - 你的新关键词
+
+AI/机器学习:
+  - dify
+  - llmcodearena
 ```
+
+修改后重新运行脚本即可应用新规则。
 
 ## 输入输出
 
@@ -84,3 +90,4 @@ category_rules = {
 
 - Python 3.12+
 - beautifulsoup4
+- pyyaml
