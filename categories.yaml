@@ -1,0 +1,52 @@
+# 分类规则配置文件
+# 分类名作为键，关键词列表作为值
+
+开发/编程:
+  - github.com
+  - gitstar-ranking.com
+  - leetcode
+  - 代码
+  - 编程
+  - 开发
+  - dev
+  - mcp
+  - pake
+
+DevOps/运维:
+  - sre-platform
+  - opsnote
+  - docker
+  - vps
+  - 服务器
+  - 监控
+  - 网络
+  - 拨测
+  - 海底光缆
+
+设计/创意:
+  - 模板码
+  - 图片制作
+  - postimages
+  - create.wan.video
+  - nanobanana
+  - 图片
+
+AI/机器学习:
+  - dify
+  - llmcodearena
+  - nano-banana
+
+社区/资讯:
+  - v2ex.com
+  - 52pojie
+  - 博客
+  - 知乎
+  - 微信公众号
+  - linux.do
+
+工具/导航:
+  - ishell
+  - yourls
+  - pingvin-share
+  - hubproxy
+  - kspeeder

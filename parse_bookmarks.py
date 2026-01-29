@@ -5,11 +5,28 @@
 """
 
 import os
+import yaml
 import re
 import datetime
 from pathlib import Path
 from collections import defaultdict
 from bs4 import BeautifulSoup
+
+
+def load_category_rules(config_path='categories.yaml'):
+    """从 YAML 配置文件加载分类规则"""
+    if os.path.exists(config_path):
+        with open(config_path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f) or {}
+    # 默认分类规则
+    return {
+        '开发/编程': ['github.com', 'gitstar-ranking.com', 'leetcode', '代码', '编程', '开发', 'dev', 'mcp', 'pake'],
+        'DevOps/运维': ['sre-platform', 'opsnote', 'docker', 'vps', '服务器', '监控', '网络', '拨测', '海底光缆'],
+        '设计/创意': ['模板码', '图片制作', 'postimages', 'create.wan.video', 'nanobanana', '图片'],
+        'AI/机器学习': ['dify', 'llmcodearena', 'nano-banana'],
+        '社区/资讯': ['v2ex.com', '52pojie', '博客', '知乎', '微信公众号', 'linux.do'],
+        '工具/导航': ['ishell', 'yourls', 'pingvin-share', 'hubproxy', 'kspeeder']
+    }
 
 
 def is_bookmarks_file(file_path):
@@ -69,19 +86,12 @@ def parse_bookmarks(file_path):
     return bookmarks
 
 
-def categorize_bookmarks(bookmarks):
+def categorize_bookmarks(bookmarks, category_rules=None):
     """根据主题对书签进行分类"""
-    categories = defaultdict(list)
+    if category_rules is None:
+        category_rules = load_category_rules()
 
-    # 定义分类规则
-    category_rules = {
-        '开发/编程': ['github.com', 'gitstar-ranking.com', 'leetcode', '代码', '编程', '开发', 'dev', 'mcp', 'pake'],
-        'DevOps/运维': ['sre-platform', 'opsnote', 'docker', 'vps', '服务器', '监控', '网络', '拨测', '海底光缆'],
-        '设计/创意': ['模板码', '图片制作', 'postimages', 'create.wan.video', 'nanobanana', '图片'],
-        'AI/机器学习': ['dify', '***REMOVED***', 'sherpa-onnx', 'llmcodearena', 'nano-banana'],
-        '社区/资讯': ['v2ex.com', '52pojie', '博客', '知乎', '微信公众号', 'linux.do'],
-        '工具/导航': ['ishell', 'yourls', 'pingvin-share', 'hubproxy', 'kspeeder']
-    }
+    categories = defaultdict(list)
 
     for bookmark in bookmarks:
         categorized = False
@@ -187,8 +197,15 @@ def main():
     # 解析书签
     bookmarks = parse_bookmarks(input_file)
 
+    # 加载分类规则
+    category_rules = load_category_rules()
+    if category_rules:
+        print(f"已加载分类规则: {len(category_rules)} 个分类")
+    else:
+        print("未找到分类规则文件，使用默认规则")
+
     # 分类
-    categories = categorize_bookmarks(bookmarks)
+    categories = categorize_bookmarks(bookmarks, category_rules)
 
     # 打印统计信息
     print_statistics(bookmarks, categories)

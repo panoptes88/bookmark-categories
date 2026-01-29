@@ -3,7 +3,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # 安装依赖
-RUN pip install --no-cache-dir beautifulsoup4
+RUN pip install --no-cache-dir beautifulsoup4 pyyaml
 
 # 复制脚本
 COPY parse_bookmarks.py .
