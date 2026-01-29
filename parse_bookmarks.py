@@ -4,10 +4,24 @@
 解析浏览器书签HTML文件，分析并整理书签内容
 """
 
+import os
 import re
 import datetime
+from pathlib import Path
 from collections import defaultdict
 from bs4 import BeautifulSoup
+
+
+def is_bookmarks_file(file_path):
+    """检测文件是否是 Netscape 格式的书签文件"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read(500)  # 只读取前500字节
+            # Netscape 书签文件的标准头部
+            return '<!DOCTYPE NETSCAPE-Bookmark-file-1>' in content.upper() or \
+                   '<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">' in content
+    except Exception:
+        return False
 
 
 def parse_bookmarks(file_path):
@@ -143,8 +157,32 @@ def print_statistics(bookmarks, categories):
 
 
 def main():
-    input_file = '/app/favorites_2026_1_29.html'
-    output_file = '/app/bookmarks_organized.html'
+    # 扫描当前目录下的所有 HTML 文件
+    html_files = list(Path('.').glob('*.html'))
+
+    if not html_files:
+        print("错误: 当前目录下没有找到 HTML 文件")
+        return
+
+    # 过滤出书签文件
+    bookmark_files = [f for f in html_files if is_bookmarks_file(f)]
+
+    if not bookmark_files:
+        print("错误: 当前目录下没有找到 Netscape 格式的书签文件")
+        return
+
+    if len(bookmark_files) > 1:
+        print(f"找到 {len(bookmark_files)} 个书签文件:")
+        for f in bookmark_files:
+            print(f"  - {f.name}")
+        print("当前版本仅支持处理单个书签文件，请保留一个书签文件后重试")
+        return
+
+    # 只有一个书签文件，处理它
+    input_file = bookmark_files[0]
+    output_file = f"organized_{input_file.name}"
+
+    print(f"正在处理: {input_file.name}")
 
     # 解析书签
     bookmarks = parse_bookmarks(input_file)

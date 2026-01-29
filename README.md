@@ -35,11 +35,12 @@
 pip install beautifulsoup4
 ```
 
-2. 编辑 `parse_bookmarks.py`，修改输入输出文件路径：
+2. 将书签文件（HTML 格式）放到当前目录：
 
-```python
-input_file = '你的书签文件路径.html'
-output_file = '输出文件路径.html'
+```bash
+# 脚本会自动扫描当前目录下的所有 HTML 文件
+# 识别 Netscape 格式的书签文件并进行处理
+ls *.html
 ```
 
 3. 运行脚本：
@@ -48,12 +49,19 @@ output_file = '输出文件路径.html'
 python parse_bookmarks.py
 ```
 
+脚本会自动：
+- 扫描当前目录下的所有 `.html` 文件
+- 识别 Netscape 格式的书签文件
+- 处理并生成 `organized_原文件名.html`
+
 ### Docker 运行
 
 ```bash
 docker build -t bookmark-tool .
 docker run -v $(pwd):/app bookmark-tool
 ```
+
+将书签文件放到当前目录，运行后会在同目录生成整理后的文件。
 
 ## 自定义分类
 
